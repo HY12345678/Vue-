@@ -4,11 +4,19 @@ const compileUtil = {
       return data[currentVal]
     },vm.$data)
   },
+  getContentVal(expr,vm) {
+    return expr.replace(/\{\{(.+?)\}\}/g,(...args) => {
+      return this.getVal(args[1],vm);
+    })
+  },
   text(node,expr,vm){ //expr:msg,vm:当前的实例
     let value;
     if(expr.indexOf('{{') !== -1){
       //处理{{person.name}}--{{person.age}}
       value = expr.replace(/\{\{(.+?)\}\}/g,(...args) => {
+        new Watcher(vm,args[1],(newVal) => {
+          this.updater.textUpdater(node,this.getContentVal(expr,vm));
+        })
         return this.getVal(args[1],vm)
       })
     }else{
@@ -18,10 +26,16 @@ const compileUtil = {
   },
   html(node,expr,vm){
     const value = this.getVal(expr,vm);
-    this.updater.htmlUpdater(node,value)
+    new Watcher(vm,expr,(newVal)=>{
+      this.updater.htmlUpdater(node,newVal);
+    })
+    this.updater.htmlUpdater(node,value);
   },
   model(node,expr,vm){
     const value = this.getVal(expr,vm);
+    new Watcher(vm,expr,(newVal)=>{
+      this.updater.modelUpdater(node,newVal);
+    })
     this.updater.modelUpdater(node,value)
   },
   on(node,expr,vm,eventName){

@@ -48,6 +48,22 @@
         }
       }
     })
+    const p = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve("abc");
+          //   reject("aa");
+        }, 1000);
+      });
+      const res = p.then(
+        (value) => {
+          console.log(value);
+          return 123;
+        },
+        (err) => {
+          console.warn(err);
+        }
+      );
+      console.log(res);
   </script>
   <style>
     #h2{
