@@ -26,6 +26,20 @@
   <script src="./Observer.js"></script>
   <script src="./MVue.js"></script>
   <script>
+    // let obj = {
+    //   name:'hy',
+    //   age:'22'
+    // }
+    // let proxyData = new Proxy(obj,{
+    //   get:(target,key)=>{
+    //     if(key in obj)
+    //       return obj[key]
+    //     else
+    //       throw new Error('属性不存在')
+    //   }
+    // })
+    // console.log(proxyData,'y');
+
     let vm=new MVue({
       el:'#app',
       data:{
@@ -41,8 +55,9 @@
       },
       methods:{
         handlerClick(){
-          console.log('this')
-          this.person.name = 'yh'
+          console.log('this',this)
+          // this.myh2 = 'pp'
+          this.person.msg = 'pp'
         },
         handlerClick2(){
           console.log('@')

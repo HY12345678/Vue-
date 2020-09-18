@@ -174,19 +174,42 @@ class MVue {
       new Observer(this.$data)
       //2、实现一个指令解析器    compile
       new Compile(this.$el,this);
+      // this.defineProxyData(this.$data);
       this.proxyData(this.$data);
+    
     }
   }
-  proxyData(data){
+  //1、通过Object.defineProperty()来实现代理
+  defineProxyData(data){
     for(const key in data){
       Object.defineProperty(this,key,{
         get(){
+          console.log(this,'thisthis')
           return data[key];
+          
         },
         set(newVal){
           data[key] = newVal
         }
       })
     }
+  }
+  //2、通过proxy来实现代理
+  proxyData(data){
+    console.log(data,'data')
+    return new Proxy(this,{
+      
+      get(target,key){
+        console.log(this,'thisthis')
+        return data[key]
+      },
+      set(target,key,newVal){
+        console.log(key,newVal,'pppuu')
+        data[key] = newVal
+        return true
+      }
+    })
+
+    // console.log(proxyObj.myh2,)
   }
 }
